@@ -1,0 +1,9 @@
+jaffle_shop:
+  target: prod
+  outputs:
+    prod:
+      type: snowflake
+      warehouse: wilmar_analytics_demo_wh
+      database: wilmar_analytics_demo_db
+      schema: prod
+      threads: 8
