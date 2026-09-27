@@ -82,3 +82,26 @@ models:
         description: Amount of the order (AUD) paid for by gift card
         tests:
           - not_null
+
+  - name: order_summary
+    description: Order counts and total amount (AUD) grouped by order status
+
+    columns:
+      - name: status
+        description: Order status
+        tests:
+          - unique
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+
+      - name: order_count
+        description: Number of orders with this status
+        tests:
+          - not_null
+
+      - name: total_amount
+        description: Total amount (AUD) of orders with this status
+        tests:
+          - not_null
