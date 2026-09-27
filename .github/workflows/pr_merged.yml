@@ -45,6 +45,18 @@ jobs:
       - name: List all of the snowflake dbt project objects on your account
         run: snow dbt list -x
 
+      # Builds all models and runs tests in DAG order, failing early if any upstream test breaks
+      - name: Build and test dbt project in ${{ vars.SNOWFLAKE_DATABASE }}.${{ vars.SNOWFLAKE_SCHEMA }}
+        run: |
+          cat > cd_prod.sql <<SQL
+          EXECUTE DBT PROJECT wilmar_analytics_demo_dbt_project
+            ARGS = 'build --target prod --state ./imports/state --select state:modified+'
+            IMPORTS = (
+              SYSTEM\$DBT_GET_LAST_SUCCESSFUL_RUN_TARGET('dbt_project_demo.prod.wilmar_analytics_demo_dbt_project', 'build,run') AS 'state'
+            );
+          SQL
+          cat cd_prod.sql
+          snow sql -x -f cd_prod.sql
       # (optional) Uncomment the lines below and follow Step 7 if you want to manage Task orchestration via source control
       # - name: Run schedules.sql to create or alter tasks for tasty_bytes_dbt_object_gh_action
       #   run: snow sql -f ${{ github.workspace }}/tasty_bytes/schedules.sql -x

@@ -45,6 +45,16 @@ jobs:
       - name: List all of the snowflake dbt project objects in your account
         run: snow dbt list -x
 
-      # Builds all models and runs tests in DAG order, failing early if any upstream test breaks
-      - name: Build and test dbt project in ${{ vars.SNOWFLAKE_DATABASE }}.${{ vars.SNOWFLAKE_SCHEMA }}
-        run: snow dbt execute -x ci_wilmar_analytics_demo_dbt_project build --target dev
+      # Builds modified models and runs tests in DAG order, failing early if any upstream test breaks
+      - name: Run Slim CI (modified models only)
+        run: |
+          cat > slim_ci.sql <<SQL
+          EXECUTE DBT PROJECT ci_wilmar_analytics_demo_dbt_project
+            ARGS = 'build --target dev --state ./imports/state --defer --select state:modified+'
+            IMPORTS = (
+              SYSTEM\$DBT_GET_LAST_SUCCESSFUL_RUN_TARGET('dbt_project_demo.prod.wilmar_analytics_demo_dbt_project') AS 'state'
+            )
+            WRITEBACK = FALSE;
+          SQL
+          cat slim_ci.sql
+          snow sql -x -f slim_ci.sql
