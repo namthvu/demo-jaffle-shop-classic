@@ -8,3 +8,10 @@ jaffle_shop:
       schema: prod
       role: wilmar_analytics_demo_role
       threads: 8
+    dev:
+      type: snowflake
+      warehouse: wilmar_analytics_demo_wh
+      database: wilmar_analytics_demo_db
+      schema: dev
+      role: wilmar_analytics_demo_role
+      threads: 8
