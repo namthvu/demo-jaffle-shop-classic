@@ -3,15 +3,15 @@ jaffle_shop:
   outputs:
     prod:
       type: snowflake
-      warehouse: wilmar_analytics_demo_wh
-      database: wilmar_analytics_demo_db
-      schema: prod
-      role: wilmar_analytics_demo_role
+      warehouse: WILMAR_ANALYTICS_DEMO_WH
+      database: WILMAR_ANALYTICS_DEMO_DB
+      schema: PROD
+      role: WILMAR_ANALYTICS_DEMO_ROLE
       threads: 8
     dev:
       type: snowflake
-      warehouse: wilmar_analytics_demo_wh
-      database: wilmar_analytics_demo_db
-      schema: dev
-      role: wilmar_analytics_demo_role
+      warehouse: WILMAR_ANALYTICS_DEMO_WH
+      database: WILMAR_ANALYTICS_DEMO_DB
+      schema: DEV
+      role: WILMAR_ANALYTICS_DEMO_ROLE
       threads: 8
